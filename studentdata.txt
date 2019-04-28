@@ -1,0 +1,3 @@
+274303575,alice,freshmen,communications,3.8,1
+244684350,bob,senior,computer science,3,2
+297918979,charlie,junior,biology,4,2
