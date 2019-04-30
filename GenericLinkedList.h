@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <cstdlib>
 using namespace std;
 template<typename E>
 class ListNode {
@@ -139,6 +140,7 @@ E GenLinkedList<E>::removeFront() {
 template <typename E>
 int GenLinkedList<E>::find(E val) const {
   int idx = -1;
+  cout << "in find sll\n";
   ListNode<E> *curr = front;
   while (curr != NULL) {
     ++idx;
@@ -152,16 +154,23 @@ int GenLinkedList<E>::find(E val) const {
   if (curr == NULL) { //we did not find the value
     idx = -1;
   }
+  cout << "idx: " << idx << endl;
   return idx;
 }
 template <typename E>
 E GenLinkedList<E>::deletePos(int pos) {
+  if (pos < 0 || pos > this->getSize()-1) {
+    cout << "invalid position to delete!\n";
+    exit(1);
+  }
+  cout << "in deletepos linkedlist\n";
   int idx = 0;
   //add check to make sure position is valid
   if (pos == 0) { //if position is 0, then call removeFront?
     return removeFront();
   }
   else {
+    cout << "delete mid position\n";
     ListNode<E> *curr = front;
     ListNode<E> *prev = front;
     while (idx != pos) {

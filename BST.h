@@ -38,6 +38,7 @@ template <typename E>
 class BST {
 public:
     BST();
+  //  BST(const BST<E>& copy);
     ~BST();
     void insert(const E& value);
     bool contains(const E &value);
@@ -64,6 +65,22 @@ BST<E>::BST() //default constructor
   this->root = NULL;
   this->size = 0;
 }
+
+
+/*
+template <typename E>
+BST<E>::BST(const BST<E>& copy) {
+  BST<E*> temp;
+  temp = new BST<E>();
+  cout << "bst copy contructor called" << endl;
+  temp->root = copy.getRoot();
+  temp->size = copy.getSize();
+  while(!copy.isEmpty()) {
+    temp->insert(copy.getRoot()->value);
+    copy.deleter(copy.getRoot()->value);
+  }
+}
+*/
 template <typename E>
 BST<E>::~BST() {
   while(this->root != NULL) {
@@ -77,22 +94,35 @@ TreeNode<E>* BST<E>::getRoot() {
 
 template <typename E>
 void BST<E>::findIOTNode(int count, int position, TreeNode<E>* node, TreeNode<E>*& modifiedNode) {
-  if (count > position) {
+  if (modifiedNode->value.getIDNum() > 299999999) {
     return;
   }
-  if (node->left != NULL) {
+  if (node->left != NULL && modifiedNode->value.getIDNum() < 299999999) {
+    cerr << "going left" << endl;
     findIOTNode(count, position, node->left, modifiedNode);
   }
-  if (count == position) {
+
+  cout << "modified node value: " << modifiedNode->value.getIDNum() << endl;
+
+  cout << "node id: " << node->value.getIDNum() << endl;
+  cerr << "position: " << position << endl;
+  cerr << "count: " << count << endl;
+  if (modifiedNode->value.getIDNum() >= position && node->value.getIDNum() != 0 && modifiedNode->value.getIDNum() <299999999) {
+    cout << "modifed node!" << endl;
     modifiedNode = node;
     cout << modifiedNode->value.getIDNum() << endl;
-    count += RAND_MAX;
   }
-  count++;
-  if (node->right != NULL) {
+  if(node->value.getIDNum() != 0 && modifiedNode->value.getIDNum() < 299999999) {
+    modifiedNode->value.setIDNum(modifiedNode->value.getIDNum() + 1);
+  }
+
+
+  if (node->right != NULL && modifiedNode->value.getIDNum() < 299999999) {
+    cerr << "going right" << endl;
     findIOTNode(count, position, node->right, modifiedNode);
   }
 }
+
 template <typename E>
 void BST<E>::printTree() {
   recPrint(this->root);
@@ -154,7 +184,6 @@ void BST<E>::insert(const E& value) {
 }
 template <typename E>
 TreeNode<E>* BST<E>::findNode(const E& value) {
-  cout << "what is this crap" << endl;
   if (isEmpty()) {
     cout << "isempty" <<endl;
     return NULL;
@@ -167,11 +196,9 @@ TreeNode<E>* BST<E>::findNode(const E& value) {
     else
       current = current -> right;
     if (current == NULL) { //item not in tree
-      cout << "not found" << endl;
       break;
     }
   }
-  cout << "found it wtf" << endl;
   return current;
 }
 template <typename E>

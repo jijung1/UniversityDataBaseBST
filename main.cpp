@@ -20,6 +20,8 @@ int main(int argc, char** argv) {
   GenLinkedList<unsigned int>* list;
   GenLinkedList<unsigned int>* list2;
   GenLinkedList<unsigned int>* list3;
+  GenLinkedList<unsigned int>* list4;
+
   list = new GenLinkedList<unsigned int>();
   list->insertFront(10);
   list->insertFront(20);
@@ -27,10 +29,13 @@ int main(int argc, char** argv) {
   list2->insertFront(30);
   list2->insertFront(40);
   list3 = new GenLinkedList<unsigned int>();
+  list4 = new GenLinkedList<unsigned int>();
+
 
   Faculty f1("poppy", "Professor", "computer science", *list);
   Faculty f2("riven", "Associate Professor", "chemistry", *list2);
   Faculty f3("linstead","Head of Computer Science Department", "Comptuter Science", *list3);
+  Faculty f4("german", "Professor", "computer science", *list4);
   cout << f1.toExtern() << endl;
   cout << a.toExtern() << endl;
 
@@ -40,6 +45,7 @@ int main(int argc, char** argv) {
   ftest->insert(f1);
   ftest->insert(f2);
   ftest->insert(f3);
+  ftest->insert(f4);
 
   BST<Student>* test;
   test = new BST<Student>();

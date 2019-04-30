@@ -14,7 +14,7 @@ Assignment:             4
 #define FILEIO_H
 
 #include "Student.h"
-//#include "Faculty.h"
+#include "Faculty.h"
 #include "BST.h"
 #include <fstream>
 #include <string>

@@ -7,7 +7,7 @@
 #include "Faculty.h"
 #include "Student.h"
 #include <string>
-//#include "FileIO.h"
+#include "FileIO.h"
 
 using namespace std;
 
@@ -15,6 +15,8 @@ class UniversityDB {
 private:
   BST<Student>* masterStudent;
   BST<Faculty>* masterFaculty;
+  FileIO<Student>* externStudent;
+  FileIO<Faculty>* externFaculty;
 
 public:
   UniversityDB(const BST<Student>& masterStudent, const BST<Faculty>& masterFaculty);
