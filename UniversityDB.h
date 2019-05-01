@@ -17,6 +17,7 @@ private:
   BST<Faculty>* masterFaculty;
   FileIO<Student>* externStudent;
   FileIO<Faculty>* externFaculty;
+  GenStack<Database>* lastFive; //every time a tree changing thing occurs, save off DB before and add to stack
 
 public:
   UniversityDB(const BST<Student>& masterStudent, const BST<Faculty>& masterFaculty);

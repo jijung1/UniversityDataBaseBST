@@ -7,7 +7,8 @@ UniversityDB::UniversityDB(const BST<Student>& masterStudent, const BST<Faculty>
   *temp2 = masterFaculty;
   this->masterStudent = temp;
   this->masterFaculty = temp2;
-
+  this->lastFive = new GenStack<Database>(5);
+  this->lastFive->push(this);
   this->externStudent = new FileIO<Student>("studentBSTdata.out"); //open file read stream and initialize database
   this->externFaculty = new FileIO<Faculty>("facultyBSTdata.out");
 
@@ -15,7 +16,7 @@ UniversityDB::UniversityDB(const BST<Student>& masterStudent, const BST<Faculty>
 UniversityDB::~UniversityDB() {
   delete masterStudent;
   delete masterFaculty;
-
+  delete lastFive;
 }
 
 /*
@@ -89,7 +90,7 @@ void UniversityDB::run() {
         this->masterStudent->printTree();
         break;
 
-      case 2:
+      case 2: //print all faculty
       if (this->masterFaculty->isEmpty()) {
         cout << "empty faculty database!\n";
       }
@@ -102,8 +103,8 @@ void UniversityDB::run() {
         Student* temp;
         temp = new Student;
         temp->setIDNum(lookupID);
-        if (this->masterStudent->findNode(*temp) != NULL) {
-          cout << this->masterStudent->findNode(*temp)->value.toString();
+        if (masterStudent->findNode(*temp) != NULL) {
+          cout << masterStudent->findNode(*temp)->value.toString();
         }
         else {
           cout << "ID number not found!\n";
@@ -116,9 +117,9 @@ void UniversityDB::run() {
         cin >> lookupID2;
         Faculty* temp2;
         temp2 = new Faculty;
-        temp2 ->setIDNum(lookupID2);
-        if (this->masterFaculty->findNode(*temp2) != NULL) {
-          cout << this->masterFaculty->findNode(*temp2)->value.toString();
+        temp2->setIDNum(lookupID2);
+        if (masterFaculty->findNode(*temp2) != NULL) {
+          cout << masterFaculty->findNode(*temp2)->value.toString();
         }
         else {
           cout << "ID number not found!\n";
@@ -144,7 +145,7 @@ void UniversityDB::run() {
           temp4 = new Faculty;
           temp4->setIDNum(facultyID);
           cout << "facultyID: " << facultyID << endl;
-          cout << this->masterFaculty->findNode(*temp4)->value.toString();
+          cout << masterFaculty->findNode(*temp4)->value.toString();
         }
         else {
           cout << "information not found!\n";
@@ -161,10 +162,10 @@ void UniversityDB::run() {
       else {
         Faculty* temp5;
         temp5 = new Faculty;
-        temp5 -> setIDNum(lookupID4);
-        if (this->masterFaculty->findNode(*temp5) != NULL) {
+        temp5->setIDNum(lookupID4);
+        if (masterFaculty->findNode(*temp5) != NULL) {
           cout << "Advisees: ";
-          cout << this->masterFaculty->findNode(*temp5)->value.advisees->printList();
+          cout << masterFaculty->findNode(*temp5)->value.advisees->printList();
         }
         else {
           cout << "No faculty found with input ID: " << lookupID4 << endl;
@@ -200,10 +201,11 @@ void UniversityDB::run() {
         }
         newStudent = new Student(newStudentName, newStudentLevel, newStudentMajor, newStudentGPA);
         newStudent->assignIdNum();
-        this->masterStudent->insert(*newStudent);
+        masterStudent->insert(*newStudent);
         assignAdvisor(*newStudent);
-
-
+        if(lastFive->isFull())
+          lastFive->delLast();
+        lastFive->push(this);
         break;
       case 8: //add new faculty
         adviseeList = new GenLinkedList<unsigned int>();
@@ -228,7 +230,10 @@ void UniversityDB::run() {
         }
         newFaculty = new Faculty(newFacultyName, newLevel, newDepartment, *adviseeList);
         newFaculty->assignIdNum();
-        this->masterFaculty->insert(*newFaculty);
+        masterFaculty->insert(*newFaculty);
+        if(lastFive->isFull())
+          lastFive->delLast();
+        lastFive->push(this);
         break;
       case 9: //delete a student -> remove student from faculty advisee list and delete the student 1
         cout << "Please enter ID of student to delete: ";
@@ -246,7 +251,9 @@ void UniversityDB::run() {
         delFaculty->setIDNum(delAdvisorID);
         this->masterStudent->deleter(*delStudent);
         this->masterFaculty->findNode(*delFaculty)->value.removeAdvisee(delStudentID);
-
+        if(lastFive->isFull())
+          lastFive->delLast();
+        lastFive->push(this);
         break;
       case 10:  //delete a faculty member
 
@@ -274,6 +281,11 @@ void UniversityDB::run() {
         */
         break;
       case 13:  //roll back LOL
+      if(!lastFive.isEmpty())
+      {
+        this->masterFaculty = lastFive.peek().masterFaculty;
+        this->masterStudent = lastFive.pop().masterStudent;
+      }
         break;
       case 14:  //Save and exit database to exter output stream to text filepath
         cout << "Saving and exiting..." << endl;
@@ -281,8 +293,11 @@ void UniversityDB::run() {
         break;
       case 15:  //clear Databases
         cout << "WARNING: Are you sure you want to clear the database? (y/n)";
-        this->masterStudent = new BST<Student>();
-        this->masterFaculty = new BST<Faculty>();
+        masterStudent = new BST<Student>();
+        masterFaculty = new BST<Faculty>();
+        if(lastFive->isFull())
+          lastFive->delLast();
+        lastFive->push(this);
         break;
 
       default:
@@ -295,17 +310,17 @@ void UniversityDB::run() {
 
 void UniversityDB::assignAdvisor(const Student& student) {  //randomly assign advisor to advisee and add advisee to advisor
   unsigned int facultyID = 0;
-  int size = this->masterFaculty->getSize(); //randomly choose advisor from existing advisors
+  int size = masterFaculty->getSize(); //randomly choose advisor from existing advisors
   int a = (rand() % size);
   TreeNode<Faculty>* modifiedNode = new TreeNode<Faculty>();
-  this->masterFaculty->printTree();
-  this->masterFaculty->findIOTNode(0,a,this->masterFaculty->getRoot(),modifiedNode); //found faculty to assign
+  masterFaculty->printTree();
+  masterFaculty->findIOTNode(0,a,this->masterFaculty->getRoot(),modifiedNode); //found faculty to assign
   if (modifiedNode->value.getIDNum() != 0) {
     facultyID = modifiedNode->value.getIDNum();
     Student* tempStudent = new Student;
     *tempStudent = student; //call copy constructor
     modifiedNode->value.addAdvisee(tempStudent->getIDNum()); //add student to target faculty advisee list
-    this->masterStudent->findNode(*tempStudent)->value.setAdvisor(facultyID);
+    masterStudent->findNode(*tempStudent)->value.setAdvisor(facultyID);
   }
   else {
     cout << "failed to assign advisor!\n";
