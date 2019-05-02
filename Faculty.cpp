@@ -79,7 +79,7 @@ void Faculty::setDepartment(string department) {
 
 bool Faculty::addAdvisee(unsigned int idNum) {
   if ((this->advisees->find(idNum)) == -1) {
-    cout << "adding advisee!\n";
+    cout << "adding advisee!";
     this->advisees->insertFront(idNum);
   }
   else {
@@ -93,11 +93,7 @@ bool Faculty::removeAdvisee(unsigned int idNum) {
   int position = this->advisees->find(idNum);
   if (position != -1)
     this->advisees->deletePos(position);
-  //find advisee and delete
-  //int position = this->advisees->fine(idNum);
-  //if(position != -1)
-  //this->advisees->deletePos(position);
-  //reassign advisee in database class
+
 }
 
 unsigned int Faculty::assignIdNum() {
@@ -121,6 +117,7 @@ string Faculty::toExtern() {
   ret += this->getDepartment();
   ret += ",";
   ret += this->advisees->printList();
+  ret+="\n";
   return ret;
 }
 string Faculty::toString() {

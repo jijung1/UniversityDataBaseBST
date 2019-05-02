@@ -25,11 +25,10 @@ using namespace std;
 
 template <typename E>
 class FileIO {
-private:
+public:
   string filePath;
   ifstream istream;
   ofstream ostream;
-public:
   FileIO(string filePath);
   ~FileIO();
   string readLine();
@@ -47,7 +46,7 @@ template <typename E>
 FileIO<E>::FileIO(string filePath){ //main contructor
   this->filePath = filePath;
   this->istream = ifstream(filePath);
-  this->ostream = ofstream(filePath);
+  this->ostream = ofstream(filePath, std::ios_base::app);
 }
 template <typename E>
 FileIO<E>::~FileIO() { //destructor

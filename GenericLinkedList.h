@@ -70,14 +70,15 @@ GenLinkedList<E>::GenLinkedList(const GenLinkedList& otherList) { //copy constru
   }
   else {
 
-    this->size = otherList.getSize();
     this->front = new ListNode<E>(otherList.front->data);
     ListNode<E>* tempOther = otherList.front->next;
     ListNode<E>* temp = this->front;
+    this->size = 1;
     while (tempOther != NULL) {
       temp->next = new ListNode<E> (tempOther, tempOther->data);
       temp = temp->next;
       tempOther = tempOther->next;
+      this->size++;
     }
     temp->next = NULL;
     tempOther = NULL;
@@ -102,7 +103,7 @@ bool GenLinkedList<E>::isEmpty() const {
 
 template <typename E>
 unsigned int GenLinkedList<E>::getSize() const{
-  return size;
+  return this->size;
 }
 template <typename E>
 string GenLinkedList<E>::printList() const{
@@ -131,7 +132,7 @@ E GenLinkedList<E>::removeFront() {
   ListNode<E> *ft = this->front;
   this->front = this->front->next;
   ft->next = NULL; //
-  size--;
+  this->size--;
   delete ft;
 
   return temp;

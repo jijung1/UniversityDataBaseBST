@@ -8,36 +8,154 @@ UniversityDB::UniversityDB(const BST<Student>& masterStudent, const BST<Faculty>
   this->masterStudent = temp;
   this->masterFaculty = temp2;
 
-  this->externStudent = new FileIO<Student>("studentBSTdata.out"); //open file read stream and initialize database
-  this->externFaculty = new FileIO<Faculty>("facultyBSTdata.out");
-
+  this->externStudent = new FileIO<Student>("studentBSTdata.txt"); //open file read stream and initialize database
+  this->externFaculty = new FileIO<Faculty>("facultyBSTdata.txt");
 }
 UniversityDB::~UniversityDB() {
   delete masterStudent;
   delete masterFaculty;
+  delete externStudent;
+  delete externFaculty;
 
 }
-
-/*
-void UniversityDB::setMasterStudent(const BST<Student>& masterStudent) {
-
-}
-void UniversityDB::setMasterFaculty(const BST<Faculty>& masterFaculty) {
-
-}
-
-const BST<Student>& UniversityDB::getMasterStudent() {
-  return *this->masterStudent;
-}
-const BST<Faculty>& UniversityDB::getMasterFaculty() {
-  return *this->masterFaculty;
-}
-*/
-
 
 void UniversityDB::run() {
   bool boole = true;
-  //initialize everything
+  //if externStudent and externFaculty are not empty, load 'er up
+  Student* insertStudent;
+  insertStudent = new Student; //name level major gpa advisor
+  unsigned int newStudentID;
+  string sname = "";
+  string slevel = "";
+  string smajor = "";
+  double sgpa = 0.0f;
+  unsigned int sadvisor = 0;
+  string germanShepherd = "";
+  while (!this->externStudent->endOfFile()) {
+    germanShepherd = this->externStudent->readLine();
+    int i = 0;
+    if (germanShepherd.length() > 18) {
+      cout << "line: " <<germanShepherd << endl;
+      i = 0;
+      while (germanShepherd[i] != static_cast<char>(44)) { //while there there are still delimiters and end of string has not been reached
+        ++i;
+      }
+      newStudentID = stoul(germanShepherd.substr(0,i),nullptr,0 );
+      cout << "newstudentid: " <<newStudentID << endl;
+      germanShepherd = germanShepherd.substr(i+1, germanShepherd.length());
+      i = 0;
+      while (germanShepherd[i] != static_cast<char>(44)) {
+        ++i;
+      }
+      sname = germanShepherd.substr(0,i);
+      cout << "sname: " << sname << endl;
+      germanShepherd = germanShepherd.substr(i+1, germanShepherd.length());
+      cout << "germ shep: " << germanShepherd << endl;
+      i = 0;
+      while (germanShepherd[i] != static_cast<char>(44)) {
+        ++i;
+      }
+      slevel = germanShepherd.substr(0,i);
+      cout << "slevel: " << slevel << endl;
+      germanShepherd = germanShepherd.substr(i+1, germanShepherd.length());
+      i = 0;
+      while (germanShepherd[i] != static_cast<char>(44)) {
+        ++i;
+      }
+      smajor = germanShepherd.substr(0,i);
+      cout << "smajor: " << smajor << endl;
+      germanShepherd = germanShepherd.substr(i+1, germanShepherd.length());
+      i = 0;
+      while (germanShepherd[i] != static_cast<char>(44)) {
+        ++i;
+      }
+      sgpa = stod(germanShepherd.substr(0,i));
+      cout << "sgpa: " << sgpa << endl;
+      germanShepherd = germanShepherd.substr(i+1, germanShepherd.length());
+      i = 0;
+
+      sadvisor = stoul(germanShepherd,nullptr,0 );
+      cout << "sadvisor: " << sadvisor << endl;
+      insertStudent->setIDNum(newStudentID);
+      insertStudent->setName(sname);
+      insertStudent->setLevel(slevel);
+      insertStudent->setMajor(smajor);
+      insertStudent->setAdvisor(sadvisor);
+      this->masterStudent->insert(*insertStudent);
+    }
+    else {
+      break;
+    }
+  }
+  Faculty* insertFaculty;
+  insertFaculty = new Faculty; //name level major gpa advisor
+  unsigned int newFacultyID = 0;
+  string fname = "";
+  string flevel = "";
+  string fdepartment = "";
+  GenLinkedList<unsigned int>* insertadvisees;
+  insertadvisees = new GenLinkedList<unsigned int>();
+  string australianshepherd = "";
+  unsigned int insertadviseeID = 0;
+  while (!this->externFaculty->endOfFile()) {
+    australianshepherd = this->externFaculty->readLine();
+    cout << "australianshepherd: " << australianshepherd << endl;
+    int i = 0;
+    if (australianshepherd.length() > 10) {
+      while (australianshepherd[i] != static_cast<char>(44)) { //while there there are still delimiters and end of string has not been reached
+        ++i;
+      }
+      newFacultyID = stoul(australianshepherd.substr(0,i),nullptr,0);
+      cout << "newFacultyID: " <<newFacultyID << endl;
+      australianshepherd = australianshepherd.substr(i+1, australianshepherd.length());
+      i = 0;
+      while (australianshepherd[i] != static_cast<char>(44)) { //while there there are still delimiters and end of string has not been reached
+        ++i;
+      }
+      fname = australianshepherd.substr(0,i);
+      cout << "fname: " << fname << endl;
+      australianshepherd = australianshepherd.substr(i+1, australianshepherd.length());
+      i = 0;
+      while (australianshepherd[i] != static_cast<char>(44)) { //while there there are still delimiters and end of string has not been reached
+        ++i;
+      }
+      flevel = australianshepherd.substr(0,i);
+      cout << "level: " << flevel << endl;
+      australianshepherd = australianshepherd.substr(i+1, australianshepherd.length());
+      i = 0;
+      while (australianshepherd[i] != static_cast<char>(44)) { //while there there are still delimiters and end of string has not been reached
+        ++i;
+      }
+      fdepartment = australianshepherd.substr(0,i);
+      cout << "fdepartment: " << fdepartment << endl;
+      australianshepherd = australianshepherd.substr(i+1, australianshepherd.length());
+      cout << "australianshepherd: " << australianshepherd << endl;
+      int j = 0;
+      while (australianshepherd.length() > 9) {
+        j = 0;
+        while (australianshepherd[j] != static_cast<char>(44)) {
+          ++j;
+        }
+        insertadviseeID = stoul(australianshepherd.substr(0,j),nullptr,0);
+        cout << "to insert to ll: " << insertadviseeID << endl;
+        insertadvisees->insertFront(insertadviseeID);
+        australianshepherd = australianshepherd.substr(j+1, australianshepherd.length());
+        cout << "australianshepherd last: " << australianshepherd << endl;
+        cout << "size: " << australianshepherd.length() << endl;
+      }
+      if (australianshepherd.length() > 8) {
+        insertadviseeID = stoul(australianshepherd,nullptr,0);
+        insertadvisees->insertFront(insertadviseeID);
+      }
+
+      insertFaculty = new Faculty(fname, flevel, fdepartment, *insertadvisees);
+      this->masterFaculty->insert(*insertFaculty);
+    }
+    else {
+      break;
+    }
+  }
+
   while(boole) {
     cout << "\n-------------------------------------------\n";
     cout << "Please choose from the following options: " << endl;
@@ -76,9 +194,12 @@ void UniversityDB::run() {
     unsigned int delAdvisorID = 0;
     unsigned int remAdviseeID = 0;
     unsigned int remAdviseeFID = 0;
+    unsigned int delFacultyID = 0;
+    unsigned int reassignSID = 0;
 
     Faculty* newFaculty;
     GenLinkedList<unsigned int>* adviseeList;
+    GenLinkedList<unsigned int>* adviseesToDelete;
 
     switch (choice)
     {
@@ -192,7 +313,7 @@ void UniversityDB::run() {
           cout << "invalid input!\n";
           break;
         }
-        cout << "Please enter the student's GPA: "; //must input 0.00 format cannot input integer for some reason
+        cout << "Please enter the student's GPA: ";
         cin >> newStudentGPA;
         if (cin.fail()) {
           cout << "invalid input! \n";
@@ -201,7 +322,11 @@ void UniversityDB::run() {
         newStudent = new Student(newStudentName, newStudentLevel, newStudentMajor, newStudentGPA);
         newStudent->assignIdNum();
         this->masterStudent->insert(*newStudent);
-        assignAdvisor(*newStudent);
+        if (this->masterFaculty->getSize() > 0) {
+          assignAdvisor(*newStudent);
+        }
+        else
+          cout << "No Faculty Advisor available to assign!\n";
 
 
         break;
@@ -249,34 +374,103 @@ void UniversityDB::run() {
 
         break;
       case 10:  //delete a faculty member
+        cout << "please enter faculty ID: ";
+        cin >> delFacultyID;
+        if (cin.fail()) {
+          cout << "invalid input!\n";
+          break;
+        }
+        Faculty* facultyToDelete;
+        facultyToDelete = new Faculty;
+        facultyToDelete->setIDNum(delFacultyID);
+        if (this->masterFaculty->findNode(*facultyToDelete) != NULL) {
+          adviseesToDelete = new GenLinkedList<unsigned int>();
+          *adviseesToDelete = *this->masterFaculty->findNode(*facultyToDelete)->value.advisees; //we have a list of advisees to reassign
+          cout << "to remove: " << adviseesToDelete->printList();
+          while (!adviseesToDelete->isEmpty()) {
+            reassignSID = adviseesToDelete->removeFront();
+            if (reassignSID > 199999999) {
+              cout << "id: " << reassignSID << endl;
+              Student* tempStudent;
+              tempStudent = new Student;
+              tempStudent->setIDNum(reassignSID);
+
+              while (masterStudent->findNode(*tempStudent)->value.getAdvisor() == delFacultyID) { //make sure advisor is different
+                assignAdvisor(*tempStudent);
+                cout << "temp advisor: " << tempStudent->getAdvisor() << endl;
+              }
+              delete tempStudent;
+            }
+          }
+          this->masterFaculty->deleter(*facultyToDelete);
+        }
+        else {
+          cout << "ID not found!\n";
+        }
 
         break;
       case 11:  //change a student's advisor given student id and new faculty id
-        break;
-      case 12:  //remove an advisee from a faculty member and reassign advisee to a different fa
-      /*
-        cout << "Please enter the advisee ID: ";
+        cout << "Please enter the student id: ";
         cin >> remAdviseeID;
         if (cin.fail()) {
-          cout << "invalid input! \n";
+          "invalid input!\n";
           break;
         }
-        cout << "Please enter the faculty ID: ";
+        cout << "Please enter faculty to assign's id: ";
         cin >> remAdviseeFID;
-        if (cin.fail()) {
-          cout << "invalid input! \n";
-          break;
+        Student* replaceAdvisor;
+        replaceAdvisor = new Student;
+        replaceAdvisor->setIDNum(remAdviseeID);
+        delAdvisorID = this->masterStudent->findNode(*replaceAdvisor)->value.getAdvisor(); //old advisor
+        if (delAdvisorID != 0) {
+          this->masterStudent->findNode(*replaceAdvisor)->value.setAdvisor(remAdviseeFID);
         }
-        Faculty* editFaculty;
-        editFaculty = new Faculty;
-        editFaculty->setIDNum(remAdviseeFID);
-        this->masterFaculty->findNode(editFaculty)
-        */
+        Faculty* removeAdvisee2;
+        removeAdvisee2 = new Faculty;
+        removeAdvisee2->setIDNum(delAdvisorID);
+        this->masterFaculty->findNode(*removeAdvisee2)->value.removeAdvisee(remAdviseeID); //remove from old advisor
+        Faculty* addAdvisee2;
+        addAdvisee2 = new Faculty;
+        addAdvisee2->setIDNum(remAdviseeFID);
+        this->masterFaculty->findNode(*addAdvisee2)->value.addAdvisee(remAdviseeID);
         break;
+      case 12:  //remove an advisee from a faculty member and reassign advisee
+      cout << "Please enter the Faculty id: ";
+      cin >> remAdviseeFID;
+      if (cin.fail()) {
+        "invalid input!\n";
+        break;
+      }
+      cout << "Please enter advisee to remove's ID: ";
+      cin >> remAdviseeID;
+      Faculty* removeAdvisee;
+      removeAdvisee = new Faculty;
+      removeAdvisee->setIDNum(remAdviseeFID);
+      Student* editStudent;
+      editStudent = new Student;
+      editStudent->setIDNum(remAdviseeID);
+      while (this->masterStudent->findNode(*editStudent)->value.getAdvisor() == remAdviseeFID) {
+        assignAdvisor(*editStudent);
+      }
+      this->masterFaculty->findNode(*removeAdvisee)->value.removeAdvisee(remAdviseeID);
+      break;
       case 13:  //roll back LOL
         break;
       case 14:  //Save and exit database to exter output stream to text filepath
         cout << "Saving and exiting..." << endl;
+        this->externStudent->ostream.close();
+        this->externStudent->ostream = ofstream("studentBSTdata.txt");
+        this->externFaculty->ostream.close();
+        this->externFaculty->ostream = ofstream("facultyBSTdata.txt");
+        while (!this->masterStudent->isEmpty()) {
+          cout << this->masterStudent->getRoot()->value.toExtern();
+          externStudent->ostream << this->masterStudent->getRoot()->value.toExtern();
+          this->masterStudent->deleter(this->masterStudent->getRoot()->value);
+        }
+        while (!this->masterFaculty->isEmpty()) {
+          externFaculty->ostream << this->masterFaculty->getRoot()->value.toExtern();
+          this->masterFaculty->deleter(this->masterFaculty->getRoot()->value);
+        }
         boole = false;
         break;
       case 15:  //clear Databases
@@ -304,7 +498,9 @@ void UniversityDB::assignAdvisor(const Student& student) {  //randomly assign ad
     facultyID = modifiedNode->value.getIDNum();
     Student* tempStudent = new Student;
     *tempStudent = student; //call copy constructor
-    modifiedNode->value.addAdvisee(tempStudent->getIDNum()); //add student to target faculty advisee list
+    Faculty* tempFaculty = new Faculty;
+    tempFaculty->setIDNum(facultyID);
+    this->masterFaculty->findNode(*tempFaculty)->value.addAdvisee(tempStudent->getIDNum()); //add student to target faculty advisee list
     this->masterStudent->findNode(*tempStudent)->value.setAdvisor(facultyID);
   }
   else {
