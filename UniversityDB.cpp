@@ -261,16 +261,24 @@ void UniversityDB::run() {  //bread and butter function
         temp3->setIDNum(lookupID3);
         Faculty* temp4;
         unsigned int facultyID;
-        facultyID = this->masterStudent->findNode(*temp3)->value.getAdvisor();
-        if (facultyID > 299999999) {
-          temp4 = new Faculty;
-          temp4->setIDNum(facultyID);
-          cout << "facultyID: " << facultyID << endl;
-          cout << this->masterFaculty->findNode(*temp4)->value.toString();
+        if (this->masterStudent->getSize() != 0 && this->masterStudent->findNode(*temp3) != NULL)
+        {
+          facultyID = this->masterStudent->findNode(*temp3)->value.getAdvisor();
+          if (facultyID > 299999999) {
+            temp4 = new Faculty;
+            temp4->setIDNum(facultyID);
+            cout << "facultyID: " << facultyID << endl;
+            cout << this->masterFaculty->findNode(*temp4)->value.toString();
+          }
+          else {
+            cout << "information not found!\n";
+          }
         }
         else {
-          cout << "information not found!\n";
+          cout << "ID number not found!\n" << endl;
+          break;
         }
+
 
         break;
       case 6: //list faculty advisees
@@ -366,13 +374,23 @@ void UniversityDB::run() {  //bread and butter function
         Student* delStudent;
         delStudent = new Student;
         delStudent->setIDNum(delStudentID);
-        delAdvisorID = this->masterStudent->findNode(*delStudent)->value.getAdvisor(); //retrieve old advisor id
-        Faculty* delFaculty;
-        delFaculty = new Faculty;
-        delFaculty->setIDNum(delAdvisorID);
-        this->masterStudent->deleter(*delStudent);
-        this->masterFaculty->findNode(*delFaculty)->value.removeAdvisee(delStudentID);
-
+        if (this->masterStudent->findNode(*delStudent) != NULL) {
+          delAdvisorID = this->masterStudent->findNode(*delStudent)->value.getAdvisor(); //retrieve old advisor id
+          Faculty* delFaculty;
+          delFaculty = new Faculty;
+          delFaculty->setIDNum(delAdvisorID);
+          this->masterStudent->deleter(*delStudent);
+          if (this->masterFaculty->findNode(*delFaculty)->value.advisees->find(delStudentID) != -1) {
+            this->masterFaculty->findNode(*delFaculty)->value.removeAdvisee(delStudentID);
+          }
+          else {
+            cout << "Student's assigned advisor does not have student in advisee list!\n";
+          }
+        }
+        else {
+          cout << "Invalid ID entered! \n";
+          break;
+        }
         break;
       case 10:  //delete a faculty member
         cout << "please enter faculty ID: ";
@@ -419,16 +437,28 @@ void UniversityDB::run() {  //bread and butter function
         Student* replaceAdvisor;
         replaceAdvisor = new Student;
         replaceAdvisor->setIDNum(remAdviseeID);
-        delAdvisorID = this->masterStudent->findNode(*replaceAdvisor)->value.getAdvisor(); //old advisor
-        this->masterStudent->findNode(*replaceAdvisor)->value.setAdvisor(remAdviseeFID); //set new advisor
-        Faculty* removeAdvisee2;
-        removeAdvisee2 = new Faculty;
-        removeAdvisee2->setIDNum(delAdvisorID);
-        this->masterFaculty->findNode(*removeAdvisee2)->value.removeAdvisee(remAdviseeID); //remove from old advisor
-        Faculty* addAdvisee2;
-        addAdvisee2 = new Faculty;
-        addAdvisee2->setIDNum(remAdviseeFID);
-        this->masterFaculty->findNode(*addAdvisee2)->value.addAdvisee(remAdviseeID); //add advisee to new advisor
+        if (this->masterStudent->findNode(*replaceAdvisor) != NULL) {
+          delAdvisorID = this->masterStudent->findNode(*replaceAdvisor)->value.getAdvisor(); //old advisor
+          this->masterStudent->findNode(*replaceAdvisor)->value.setAdvisor(remAdviseeFID); //set new advisor
+          Faculty* removeAdvisee2;
+          removeAdvisee2 = new Faculty;
+          removeAdvisee2->setIDNum(delAdvisorID);
+          this->masterFaculty->findNode(*removeAdvisee2)->value.removeAdvisee(remAdviseeID); //remove from old advisor
+          Faculty* addAdvisee2;
+          addAdvisee2 = new Faculty;
+          addAdvisee2->setIDNum(remAdviseeFID);
+          if (this->masterFaculty->findNode(*addAdvisee2) != NULL) {
+            this->masterFaculty->findNode(*addAdvisee2)->value.addAdvisee(remAdviseeID); //add advisee to new advisor
+          }
+          else {
+            cout << "Invalid faculty ID entered!\n";
+            break;
+          }
+        }
+        else {
+          cout << "Invalid advisee ID entered!\n";
+          break;
+        }
         break;
       case 12:  //remove an advisee from a faculty member and reassign advisee
       cout << "Please enter the Faculty id: ";
@@ -445,10 +475,21 @@ void UniversityDB::run() {  //bread and butter function
       Student* editStudent;
       editStudent = new Student;
       editStudent->setIDNum(remAdviseeID);
-      while (this->masterStudent->findNode(*editStudent)->value.getAdvisor() == remAdviseeFID) {
-        assignAdvisor(*editStudent);
+      if (this->masterStudent->findNode(*editStudent) != NULL) {
+        while (this->masterStudent->findNode(*editStudent)->value.getAdvisor() == remAdviseeFID) {
+          assignAdvisor(*editStudent);
+        }
       }
-      this->masterFaculty->findNode(*removeAdvisee)->value.removeAdvisee(remAdviseeID);
+      else {
+        cout << "Invalid Advisee ID entered!\n";
+        break;
+      }
+      if (this->masterFaculty->findNode(*removeAdvisee) != NULL) {
+        this->masterFaculty->findNode(*removeAdvisee)->value.removeAdvisee(remAdviseeID);
+      }
+      else {
+        cout << "Invalid Faculty ID entered!\n";
+      }
       break;
       case 13:  //roll back: TO-DO
         break;
