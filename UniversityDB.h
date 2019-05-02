@@ -1,5 +1,19 @@
+/*
+Name:                   Rose Ramirez
+Student ID:             2317195
+Email:                  roramirez@chapman.edu
+Course no. & Section:   CS350-02
+
+Name:                   Jin Jung
+Student ID:             2329401
+Email:                  jijung@chapman.edu
+Course no. & Section:   CS350-02
+*/
+
 #ifndef UNIVERSITYDB_H
 #define UNIVERSITYDB_H
+
+//preprocessor directives
 
 #include <iostream>
 #include <cstdlib>
@@ -15,22 +29,14 @@ class UniversityDB {
 private:
   BST<Student>* masterStudent;
   BST<Faculty>* masterFaculty;
-  FileIO<Student>* externStudent;
+  FileIO<Student>* externStudent; //for external data read/write
   FileIO<Faculty>* externFaculty;
 
 public:
   UniversityDB(const BST<Student>& masterStudent, const BST<Faculty>& masterFaculty);
   ~UniversityDB();
-  /*
-  void setMasterStudent(const BST<Student>& masterStudent);
-  void setMasterFaculty(const BST<Student>& masterFaculty);
-  const BST<Student>& getMasterStudent();
-  const BST<Faculty>& getMasterFaculty();
-  */
   void run();
   void assignAdvisor(const Student& student);
-
-
 
 };
 

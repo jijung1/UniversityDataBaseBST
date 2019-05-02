@@ -1,3 +1,15 @@
+/*
+Name:                   Rose Ramirez
+Student ID:             2317195
+Email:                  roramirez@chapman.edu
+Course no. & Section:   CS350-02
+
+Name:                   Jin Jung
+Student ID:             2329401
+Email:                  jijung@chapman.edu
+Course no. & Section:   CS350-02
+*/
+
 #ifndef FACULTY_H
 #define FACULTY_H
 

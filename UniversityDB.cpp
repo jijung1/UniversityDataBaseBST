@@ -1,16 +1,33 @@
+/*
+Name:                   Rose Ramirez
+Student ID:             2317195
+Email:                  roramirez@chapman.edu
+Course no. & Section:   CS350-02
+
+Name:                   Jin Jung
+Student ID:             2329401
+Email:                  jijung@chapman.edu
+Course no. & Section:   CS350-02
+*/
+
+/*
+  .cpp file implementation UniversityDB program. Class Invariant: Every class will have BST<Student>* masterStudent,
+    BST<Faculty>* masterFaculty, FileIO<Student> externStudent, and FileIO<Faculty> externFaculty.
+*/
+
 #include "UniversityDB.h"
 
-UniversityDB::UniversityDB(const BST<Student>& masterStudent, const BST<Faculty>& masterFaculty) {
+UniversityDB::UniversityDB(const BST<Student>& masterStudent, const BST<Faculty>& masterFaculty) {  //main constructor
   BST<Student>* temp = new BST<Student>();
-  *temp = masterStudent;
+  *temp = masterStudent;  //call copy constructor
   BST<Faculty>* temp2 = new BST<Faculty>();
-  *temp2 = masterFaculty;
+  *temp2 = masterFaculty; //call copy constructor
   this->masterStudent = temp;
   this->masterFaculty = temp2;
   this->externStudent = new FileIO<Student>("studentBSTdata.txt"); //open file read stream and initialize database
   this->externFaculty = new FileIO<Faculty>("facultyBSTdata.txt");
 }
-UniversityDB::~UniversityDB() {
+UniversityDB::~UniversityDB() { //destructor
   delete masterStudent;
   delete masterFaculty;
   delete externStudent;
@@ -18,11 +35,11 @@ UniversityDB::~UniversityDB() {
 
 }
 
-void UniversityDB::run() {
-  bool boole = true;
+void UniversityDB::run() {  //bread and butter function
+  bool boole = true; //run switch cases until boole dies
   //if externStudent and externFaculty are not empty, load 'er up
   Student* insertStudent;
-  insertStudent = new Student; //name level major gpa advisor
+  insertStudent = new Student;
   unsigned int newStudentID;
   string sname = "";
   string slevel = "";
@@ -30,7 +47,7 @@ void UniversityDB::run() {
   double sgpa = 0.0f;
   unsigned int sadvisor = 0;
   string germanShepherd = "";
-  while (!this->externStudent->endOfFile()) {
+  while (!this->externStudent->endOfFile()) { //create instances of Student objects from file read and push into masterStudent
     germanShepherd = this->externStudent->readLine();
     int i = 0;
     if (germanShepherd.length() > 18) {
@@ -88,7 +105,7 @@ void UniversityDB::run() {
   GenLinkedList<unsigned int>* insertadvisees;
   string australianshepherd = "";
   unsigned int insertadviseeID = 0;
-  while (!this->externFaculty->endOfFile()) {
+  while (!this->externFaculty->endOfFile()) { //Create instances of Faculty objects from file read and push into masterFaculty
     insertadvisees = new GenLinkedList<unsigned int>();
     australianshepherd = this->externFaculty->readLine();
     int i = 0;
@@ -140,7 +157,7 @@ void UniversityDB::run() {
     }
   }
 
-  while(boole) {
+  while(boole) {  //display menu and loop switch options
     cout << "\n-------------------------------------------\n";
     cout << "Please choose from the following options: " << endl;
     cout << "[1]: Print all students and their information\n";
@@ -194,7 +211,7 @@ void UniversityDB::run() {
         this->masterStudent->printTree();
         break;
 
-      case 2:
+      case 2: //print all faculty and their information sorted by ascending id
       if (this->masterFaculty->isEmpty()) {
         cout << "empty faculty database!\n";
       }
@@ -339,7 +356,7 @@ void UniversityDB::run() {
         newFaculty->assignIdNum();
         this->masterFaculty->insert(*newFaculty);
         break;
-      case 9: //delete a student -> remove student from faculty advisee list and delete the student 1
+      case 9: //delete a student -> remove student from faculty advisee list and delete the student
         cout << "Please enter ID of student to delete: ";
         cin >> delStudentID;
         if (cin.fail()) {
@@ -433,7 +450,7 @@ void UniversityDB::run() {
       }
       this->masterFaculty->findNode(*removeAdvisee)->value.removeAdvisee(remAdviseeID);
       break;
-      case 13:  //roll back LOL
+      case 13:  //roll back: TO-DO
         break;
       case 14:  //Save and exit database to exter output stream to text filepath
         cout << "Saving and exiting..." << endl;

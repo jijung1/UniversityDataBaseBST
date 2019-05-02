@@ -1,6 +1,22 @@
+/*
+Name:                   Rose Ramirez
+Student ID:             2317195
+Email:                  roramirez@chapman.edu
+Course no. & Section:   CS350-02
+
+Name:                   Jin Jung
+Student ID:             2329401
+Email:                  jijung@chapman.edu
+Course no. & Section:   CS350-02
+*/
+
+/*
+  .cpp file for implementation of Faculty class. Class Invariant: Every instance will have unsigned int idNum, string name, string level, and string department.
+*/
+
 #include "Faculty.h"
   //constructor
-Faculty::Faculty() {
+Faculty::Faculty() {  //default constructor
   this->idNum = 0;
   this->name = "";
   this-> level = "";
@@ -10,7 +26,7 @@ Faculty::Faculty() {
   this->advisees = temp;
 }
 
-Faculty::Faculty(string name, string level, string department, const GenLinkedList<unsigned int>& advisees) {
+Faculty::Faculty(string name, string level, string department, const GenLinkedList<unsigned int>& advisees) { //main constructor
   this->idNum = assignIdNum();
   this->name = name;
   this-> level = level;
@@ -20,7 +36,7 @@ Faculty::Faculty(string name, string level, string department, const GenLinkedLi
   this->advisees = temp;
 }
 
-Faculty::Faculty(const Faculty& copy) {
+Faculty::Faculty(const Faculty& copy) { //copy constructor
   this->idNum = copy.getIDNum();
   this->name = copy.getName();
   this->level = copy.getLevel();
@@ -91,13 +107,13 @@ bool Faculty::removeAdvisee(unsigned int idNum) {
 
 }
 
-unsigned int Faculty::assignIdNum() {
+unsigned int Faculty::assignIdNum() { //function to randomly assign a faculty id number
   double a = ((RAND_MAX - rand()) / static_cast<double>(RAND_MAX)); // 0 - .99
   unsigned int b = static_cast<unsigned int>(a * 100000000);
   return b + 300000000;
 }
 
-string Faculty::toExtern() {
+string Faculty::toExtern() {  //formatted output for external file read/write
   ostringstream strs;
   strs << this->getIDNum();
   string idnum = strs.str();
@@ -115,7 +131,7 @@ string Faculty::toExtern() {
   ret+="\n";
   return ret;
 }
-string Faculty::toString() {
+string Faculty::toString() {  //formatted output for terminal output
   string ret = "\n";
   ret += "Faculty Name: " + this->getName();
   ret += " ID: " + to_string(this->getIDNum());
@@ -127,6 +143,8 @@ string Faculty::toString() {
   ret += "\n\n";
   return ret;
 }
+
+//overloaded operators 
 
 bool operator < (const Faculty& a,const Faculty& b) {
   unsigned int c = a.getIDNum();

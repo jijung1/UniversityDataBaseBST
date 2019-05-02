@@ -1,3 +1,20 @@
+/*
+Name:                   Rose Ramirez
+Student ID:             2317195
+Email:                  roramirez@chapman.edu
+Course no. & Section:   CS350-02
+
+Name:                   Jin Jung
+Student ID:             2329401
+Email:                  jijung@chapman.edu
+Course no. & Section:   CS350-02
+*/
+
+/*
+  .cpp file for implementation of Student class. Class Invariant: Every instance will have unsigned int idNum, string name, string level, string major
+    double gpa, and unsigned int advisor
+*/
+
 #include "Student.h"
 
 Student::Student(){
@@ -22,9 +39,8 @@ Student::Student(string name, string level, string major, double gpa) {  //idNum
 
 Student::~Student() {}
 
-//accessor & mutator functions
 
-string Student::toExtern() const {
+string Student::toExtern() const {  //formatted output for external file read/write
   ostringstream strs;
   strs << this->getGPA();
   string gpa = strs.str();
@@ -50,7 +66,7 @@ string Student::toExtern() const {
   return ret;
 }
 
-string Student::toString() const {
+string Student::toString() const { //formatted output for terminal
   string ret = "\n";
   ret += "Name: " + this->getName() + " ";
   ret += "ID: " + to_string(this->getIDNum()) + " ";
@@ -60,6 +76,8 @@ string Student::toString() const {
   ret += "Advisor: " + std::to_string(this->getAdvisor()) + "\n";
   return ret;
 }
+
+//accessor & mutator functions
 
 unsigned int Student::getIDNum() const{
     return this->idNum;
@@ -104,12 +122,15 @@ void Student::setAdvisor(unsigned int advisor) {
   this->advisor = advisor;
 }
 
-unsigned int Student::assignIdNum() { //    **** TO DO ****
+unsigned int Student::assignIdNum() { //randomly assigns student id number
   double a = ((RAND_MAX - rand()) / static_cast<double>(RAND_MAX)); // 0 - .99
   unsigned int b = static_cast<unsigned int>(a * 100000000);
   return b + 200000000;
 
 }
+
+//overloaded operators
+
 bool operator < (const Student& a, const Student& b) {
   return a.getIDNum() < b.getIDNum();
 }
