@@ -7,7 +7,6 @@ UniversityDB::UniversityDB(const BST<Student>& masterStudent, const BST<Faculty>
   *temp2 = masterFaculty;
   this->masterStudent = temp;
   this->masterFaculty = temp2;
-
   this->externStudent = new FileIO<Student>("studentBSTdata.txt"); //open file read stream and initialize database
   this->externFaculty = new FileIO<Faculty>("facultyBSTdata.txt");
 }
@@ -79,6 +78,7 @@ void UniversityDB::run() {
       insertStudent->setIDNum(newStudentID);
       insertStudent->setName(sname);
       insertStudent->setLevel(slevel);
+      insertStudent->setGPA(sgpa);
       insertStudent->setMajor(smajor);
       insertStudent->setAdvisor(sadvisor);
       this->masterStudent->insert(*insertStudent);
@@ -94,12 +94,12 @@ void UniversityDB::run() {
   string flevel = "";
   string fdepartment = "";
   GenLinkedList<unsigned int>* insertadvisees;
-  insertadvisees = new GenLinkedList<unsigned int>();
   string australianshepherd = "";
   unsigned int insertadviseeID = 0;
   while (!this->externFaculty->endOfFile()) {
+    insertadvisees = new GenLinkedList<unsigned int>();
     australianshepherd = this->externFaculty->readLine();
-    cout << "australianshepherd: " << australianshepherd << endl;
+    cout << "australian shepherd initial read: " << australianshepherd << endl;
     int i = 0;
     if (australianshepherd.length() > 10) {
       while (australianshepherd[i] != static_cast<char>(44)) { //while there there are still delimiters and end of string has not been reached
@@ -149,6 +149,7 @@ void UniversityDB::run() {
       }
 
       insertFaculty = new Faculty(fname, flevel, fdepartment, *insertadvisees);
+      insertFaculty->setIDNum(newFacultyID);
       this->masterFaculty->insert(*insertFaculty);
     }
     else {
@@ -422,9 +423,7 @@ void UniversityDB::run() {
         replaceAdvisor = new Student;
         replaceAdvisor->setIDNum(remAdviseeID);
         delAdvisorID = this->masterStudent->findNode(*replaceAdvisor)->value.getAdvisor(); //old advisor
-        if (delAdvisorID != 0) {
-          this->masterStudent->findNode(*replaceAdvisor)->value.setAdvisor(remAdviseeFID);
-        }
+        this->masterStudent->findNode(*replaceAdvisor)->value.setAdvisor(remAdviseeFID); //set new advisor
         Faculty* removeAdvisee2;
         removeAdvisee2 = new Faculty;
         removeAdvisee2->setIDNum(delAdvisorID);
@@ -432,7 +431,7 @@ void UniversityDB::run() {
         Faculty* addAdvisee2;
         addAdvisee2 = new Faculty;
         addAdvisee2->setIDNum(remAdviseeFID);
-        this->masterFaculty->findNode(*addAdvisee2)->value.addAdvisee(remAdviseeID);
+        this->masterFaculty->findNode(*addAdvisee2)->value.addAdvisee(remAdviseeID); //add advisee to new advisor
         break;
       case 12:  //remove an advisee from a faculty member and reassign advisee
       cout << "Please enter the Faculty id: ";
