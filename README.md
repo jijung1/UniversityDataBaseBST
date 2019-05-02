@@ -4,8 +4,8 @@ University Database
 Identifying Information 
 
 a. Full Name: Rose Ramirez
-b. StudentID:  
-c. Chapman email: 
+b. StudentID: 2317195
+c. Chapman email: roramirez@chapman.edu
 d. Course number and section: CS350-02 
 
 a. Full Name: Jin Jung 
