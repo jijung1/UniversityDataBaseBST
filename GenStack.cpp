@@ -1,6 +1,3 @@
-#ifndef GENSTACK_CPP
-#define GENSTACK_CPP
-
 #include <iostream>
 using namespace std;
 template <typename E>
@@ -24,17 +21,14 @@ class GenStack
 template <typename E>
 GenStack<E>::GenStack()
 {
-  cout << "corgi\n";
-  myArray = new E[5];
-  maxSize = 5;
+  myArray = new E[128];
+  maxSize = 128;
   top = -1;
 }
 template <typename E>
 GenStack<E>::GenStack(int mySize)
 {
-  cout << "german" << endl;
   myArray = new E[mySize];
-  cout << "shep" << endl;
   maxSize = mySize;
   top = -1;
 }
@@ -84,5 +78,3 @@ void GenStack<E>::delLast() //if stack is full then delete the last value to all
     myArray[i] = myArray[i+1];
   top--;
 }
-
-#endif /*GENSTACK_CPP*/
