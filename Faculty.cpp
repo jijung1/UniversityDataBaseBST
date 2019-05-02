@@ -1,3 +1,15 @@
+/*
+Name:                   Rose Ramirez
+Student ID:             2317195
+Email:                  roramirez@chapman.edu
+Course no. & Section:   CS350-02
+
+Name:                   Jin Jung
+Student ID:             2329401
+Email:                  jijung@chapman.edu
+Course no. & Section:   CS350-02
+*/
+
 #include "Faculty.h"
   //constructor
 Faculty::Faculty() {
@@ -79,16 +91,25 @@ void Faculty::setDepartment(string department) {
 
 bool Faculty::addAdvisee(unsigned int idNum) {
   if ((this->advisees->find(idNum)) == -1) {
+    cout << "adding advisee!\n";
     this->advisees->insertFront(idNum);
   }
   else {
+    cout << "advisee already assigned to this advisor!\n";
   }
+  //verify advisee exists in database class
+  //this->advisees->insertFront(idNum);
+
 }
 bool Faculty::removeAdvisee(unsigned int idNum) {
   int position = this->advisees->find(idNum);
   if (position != -1)
     this->advisees->deletePos(position);
-
+  //find advisee and delete
+  //int position = this->advisees->fine(idNum);
+  //if(position != -1)
+  //this->advisees->deletePos(position);
+  //reassign advisee in database class
 }
 
 unsigned int Faculty::assignIdNum() {
@@ -112,7 +133,6 @@ string Faculty::toExtern() {
   ret += this->getDepartment();
   ret += ",";
   ret += this->advisees->printList();
-  ret+="\n";
   return ret;
 }
 string Faculty::toString() {

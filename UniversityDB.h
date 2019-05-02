@@ -8,18 +8,23 @@
 #include "Student.h"
 #include <string>
 #include "FileIO.h"
+#include "GenStack.cpp"
 
 using namespace std;
 
 class UniversityDB {
-private:
+public:
   BST<Student>* masterStudent;
   BST<Faculty>* masterFaculty;
   FileIO<Student>* externStudent;
   FileIO<Faculty>* externFaculty;
+  //GenStack<UniversityDB>* lastFive; //every time a tree changing thing occurs, save off DB before and add to stack
 
 public:
+  UniversityDB(const UniversityDB& copy);
   UniversityDB(const BST<Student>& masterStudent, const BST<Faculty>& masterFaculty);
+
+  UniversityDB();
   ~UniversityDB();
   /*
   void setMasterStudent(const BST<Student>& masterStudent);

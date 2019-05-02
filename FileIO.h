@@ -12,6 +12,9 @@ Assignment:             4
 
 #ifndef FILEIO_H
 #define FILEIO_H
+
+#include "Student.h"
+#include "Faculty.h"
 #include "BST.h"
 #include <fstream>
 #include <string>
@@ -22,10 +25,11 @@ using namespace std;
 
 template <typename E>
 class FileIO {
-public:
+private:
   string filePath;
   ifstream istream;
   ofstream ostream;
+public:
   FileIO(string filePath);
   ~FileIO();
   string readLine();
@@ -33,13 +37,17 @@ public:
   bool endOfFile();
   int readInt();
   string toUpperCase(string someString);
+  void storeStudentNode(TreeNode<Student>* studentTN); //leverage toString() function to
+  //void storeFacultyBST(BST <Faculty> facultybst);
+//  Student retrieveStudentNode();
+//  BST<Faculty>* retrieveFacultyBST();
 };
 
 template <typename E>
 FileIO<E>::FileIO(string filePath){ //main contructor
   this->filePath = filePath;
   this->istream = ifstream(filePath);
-  this->ostream = ofstream(filePath, std::ios_base::app);
+  this->ostream = ofstream(filePath);
 }
 template <typename E>
 FileIO<E>::~FileIO() { //destructor
@@ -84,6 +92,41 @@ bool FileIO<E>::endOfFile() {
   return (istream.eof());
 }
 
+//custom BST<Student> data store
+template<typename E>
+void FileIO<E>::storeStudentNode(TreeNode<Student>* studentTN) {
+  ostream << studentTN -> value.toExtern();
+  //  ostream << studentbst->getRoot()->value.toString();
+  }
+
+/*
+template<typename E>
+BST<Student>* FileIO<E>::retrieveStudentNode() {
+  while(!istream.endOfFile())
+  {
+    string data =
+    Student ret = new Student();
+
+
+  }
+}
+*/
+/*
+template<typename E>
+void FileIO<E>::storeFacultyBST(BST<Student> studentbst) {
+  while (!studentbst->isEmpty()) {
+    ostream << studentbst->getRoot()->value.toString();
+  }
+}
+*/
+/*
+template<typename E>
+BST<Faculty>* FileIO<E>::retrieveFacultyBST() {
+  //populate a  BST and return it
+}
+*/
+
+
 template <typename E>
 string FileIO<E>::toUpperCase(string someString) {
   for(int i = 0; i < someString.length(); ++i)
@@ -95,5 +138,9 @@ string FileIO<E>::toUpperCase(string someString) {
   }
   return someString;
 }
+
+
+
+
 
 #endif /*FILEIO_H*/

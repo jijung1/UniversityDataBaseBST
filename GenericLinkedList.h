@@ -70,15 +70,14 @@ GenLinkedList<E>::GenLinkedList(const GenLinkedList& otherList) { //copy constru
   }
   else {
 
+    this->size = otherList.getSize();
     this->front = new ListNode<E>(otherList.front->data);
     ListNode<E>* tempOther = otherList.front->next;
     ListNode<E>* temp = this->front;
-    this->size = 1;
     while (tempOther != NULL) {
       temp->next = new ListNode<E> (tempOther, tempOther->data);
       temp = temp->next;
       tempOther = tempOther->next;
-      this->size++;
     }
     temp->next = NULL;
     tempOther = NULL;
@@ -103,7 +102,7 @@ bool GenLinkedList<E>::isEmpty() const {
 
 template <typename E>
 unsigned int GenLinkedList<E>::getSize() const{
-  return this->size;
+  return size;
 }
 template <typename E>
 string GenLinkedList<E>::printList() const{
@@ -132,7 +131,7 @@ E GenLinkedList<E>::removeFront() {
   ListNode<E> *ft = this->front;
   this->front = this->front->next;
   ft->next = NULL; //
-  this->size--;
+  size--;
   delete ft;
 
   return temp;
@@ -141,6 +140,7 @@ E GenLinkedList<E>::removeFront() {
 template <typename E>
 int GenLinkedList<E>::find(E val) const {
   int idx = -1;
+  cout << "in find sll\n";
   ListNode<E> *curr = front;
   while (curr != NULL) {
     ++idx;
@@ -154,6 +154,7 @@ int GenLinkedList<E>::find(E val) const {
   if (curr == NULL) { //we did not find the value
     idx = -1;
   }
+  cout << "idx: " << idx << endl;
   return idx;
 }
 template <typename E>
@@ -162,12 +163,14 @@ E GenLinkedList<E>::deletePos(int pos) {
     cout << "invalid position to delete!\n";
     exit(1);
   }
+  cout << "in deletepos linkedlist\n";
   int idx = 0;
   //add check to make sure position is valid
   if (pos == 0) { //if position is 0, then call removeFront?
     return removeFront();
   }
   else {
+    cout << "delete mid position\n";
     ListNode<E> *curr = front;
     ListNode<E> *prev = front;
     while (idx != pos) {

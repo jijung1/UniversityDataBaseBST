@@ -1,3 +1,15 @@
+/*
+Name:                   Rose Ramirez
+Student ID:             2317195
+Email:                  roramirez@chapman.edu
+Course no. & Section:   CS350-02
+
+Name:                   Jin Jung
+Student ID:             2329401
+Email:                  jijung@chapman.edu
+Course no. & Section:   CS350-02
+*/
+
 #ifndef BINARYSEARCHTREE_H
 #define BINARYSEARCHTREE_H
 
@@ -38,7 +50,7 @@ template <typename E>
 class BST {
 public:
     BST();
-  //  BST(const BST<E>& copy);
+    BST(const BST<E>& copy);
     ~BST();
     void insert(const E& value);
     bool contains(const E &value);
@@ -67,7 +79,7 @@ BST<E>::BST() //default constructor
 }
 
 
-/*
+
 template <typename E>
 BST<E>::BST(const BST<E>& copy) {
   BST<E*> temp;
@@ -80,7 +92,7 @@ BST<E>::BST(const BST<E>& copy) {
     copy.deleter(copy.getRoot()->value);
   }
 }
-*/
+
 template <typename E>
 BST<E>::~BST() {
   while(this->root != NULL) {
@@ -98,15 +110,27 @@ void BST<E>::findIOTNode(int count, int position, TreeNode<E>* node, TreeNode<E>
     return;
   }
   if (node->left != NULL && modifiedNode->value.getIDNum() < 299999999) {
+    cerr << "going left" << endl;
     findIOTNode(count, position, node->left, modifiedNode);
   }
+
+  cout << "modified node value: " << modifiedNode->value.getIDNum() << endl;
+
+  cout << "node id: " << node->value.getIDNum() << endl;
+  cerr << "position: " << position << endl;
+  cerr << "count: " << count << endl;
   if (modifiedNode->value.getIDNum() >= position && node->value.getIDNum() != 0 && modifiedNode->value.getIDNum() <299999999) {
+    cout << "modifed node!" << endl;
     modifiedNode = node;
+    cout << modifiedNode->value.getIDNum() << endl;
   }
   if(node->value.getIDNum() != 0 && modifiedNode->value.getIDNum() < 299999999) {
     modifiedNode->value.setIDNum(modifiedNode->value.getIDNum() + 1);
   }
+
+
   if (node->right != NULL && modifiedNode->value.getIDNum() < 299999999) {
+    cerr << "going right" << endl;
     findIOTNode(count, position, node->right, modifiedNode);
   }
 }
@@ -173,6 +197,7 @@ void BST<E>::insert(const E& value) {
 template <typename E>
 TreeNode<E>* BST<E>::findNode(const E& value) {
   if (isEmpty()) {
+    cout << "isempty" <<endl;
     return NULL;
   }
   TreeNode<E>* current = this->root;
@@ -291,7 +316,7 @@ bool BST<E>::deleter(E value) {
       successor->left = current->left;
     }
     else {
-      //null out and delete target node
+      //NULL out and delete target node
       parent->right = successor;
       successor->left = current->left;
     }

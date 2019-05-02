@@ -8,6 +8,14 @@ Student::Student(){
   this->gpa = 0.0f;
   this->advisor = 0;
 }
+Student::Student(const Student& copy) {
+  this->idNum = copy.getIDNum();
+  this->name = copy.getName();
+  this->level = copy.getLevel();
+  this->major = copy.getMajor();
+  this->gpa = copy.getGPA();
+  this->advisor = copy.getAdvisor();
+}
 Student::Student(string name, string level, string major, double gpa) {  //idNum randomized for even distribution in BST?
 
   this->idNum = assignIdNum();
