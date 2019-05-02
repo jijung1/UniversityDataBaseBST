@@ -8,16 +8,13 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-
   srand(time(NULL));
-
   BST<Faculty>* ftest;
   ftest = new BST<Faculty>();
   BST<Student>* test;
   test = new BST<Student>();
   UniversityDB database(*test, *ftest);
   database.run();
-
   getchar();
   return 0;
 

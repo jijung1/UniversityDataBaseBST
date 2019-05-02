@@ -79,15 +79,10 @@ void Faculty::setDepartment(string department) {
 
 bool Faculty::addAdvisee(unsigned int idNum) {
   if ((this->advisees->find(idNum)) == -1) {
-    cout << "adding advisee!";
     this->advisees->insertFront(idNum);
   }
   else {
-    cout << "advisee already assigned to this advisor!\n";
   }
-  //verify advisee exists in database class
-  //this->advisees->insertFront(idNum);
-
 }
 bool Faculty::removeAdvisee(unsigned int idNum) {
   int position = this->advisees->find(idNum);

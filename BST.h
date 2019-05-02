@@ -98,27 +98,15 @@ void BST<E>::findIOTNode(int count, int position, TreeNode<E>* node, TreeNode<E>
     return;
   }
   if (node->left != NULL && modifiedNode->value.getIDNum() < 299999999) {
-    cerr << "going left" << endl;
     findIOTNode(count, position, node->left, modifiedNode);
   }
-
-  cout << "modified node value: " << modifiedNode->value.getIDNum() << endl;
-
-  cout << "node id: " << node->value.getIDNum() << endl;
-  cerr << "position: " << position << endl;
-  cerr << "count: " << count << endl;
   if (modifiedNode->value.getIDNum() >= position && node->value.getIDNum() != 0 && modifiedNode->value.getIDNum() <299999999) {
-    cout << "modifed node!" << endl;
     modifiedNode = node;
-    cout << modifiedNode->value.getIDNum() << endl;
   }
   if(node->value.getIDNum() != 0 && modifiedNode->value.getIDNum() < 299999999) {
     modifiedNode->value.setIDNum(modifiedNode->value.getIDNum() + 1);
   }
-
-
   if (node->right != NULL && modifiedNode->value.getIDNum() < 299999999) {
-    cerr << "going right" << endl;
     findIOTNode(count, position, node->right, modifiedNode);
   }
 }
@@ -185,7 +173,6 @@ void BST<E>::insert(const E& value) {
 template <typename E>
 TreeNode<E>* BST<E>::findNode(const E& value) {
   if (isEmpty()) {
-    cout << "isempty" <<endl;
     return NULL;
   }
   TreeNode<E>* current = this->root;

@@ -24,6 +24,7 @@ Faculty(const Faculty& copy);
 Faculty(string name, string level, string department, const GenLinkedList<unsigned int>& advisees);  //idNum randomized for even distribution in BST
 //destructor
 ~Faculty();
+
 //accessor & mutator functions
 
 unsigned int getIDNum() const;
