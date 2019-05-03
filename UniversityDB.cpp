@@ -12,7 +12,7 @@ Course no. & Section:   CS350-02
 
 /*
   .cpp file implementation UniversityDB program. Class Invariant: Every class will have BST<Student>* masterStudent,
-    BST<Faculty>* masterFaculty.
+    BST<Faculty>* masterFaculty, FileIO<Student> externStudent, and FileIO<Faculty> externFaculty.
 */
 
 #include "UniversityDB.h"
@@ -24,37 +24,18 @@ UniversityDB::UniversityDB(const BST<Student>& masterStudent, const BST<Faculty>
   *temp2 = masterFaculty; //call copy constructor
   this->masterStudent = temp;
   this->masterFaculty = temp2;
-}
-UniversityDB::UniversityDB(const UniversityDB& copy) {
-  cout << "copy const called\n";
-  BST<Student>* temp = new BST<Student>();
-  BST<Faculty>* temp2 = new BST<Faculty>();
-  *temp = *copy.masterStudent;
-  *temp2 = *copy.masterFaculty;
-  this->masterStudent = temp;
-  this->masterFaculty = temp2;
-  cout << "made it\n";
-}
-UniversityDB::UniversityDB() {
-  BST<Student>* temp = new BST<Student>();
-  BST<Faculty>* temp2 = new BST<Faculty>();
-  this->masterStudent = temp;
-  this->masterFaculty = temp2;
+  this->externStudent = new FileIO<Student>("studentBSTdata.txt"); //open file read stream and initialize database
+  this->externFaculty = new FileIO<Faculty>("facultyBSTdata.txt");
 }
 UniversityDB::~UniversityDB() { //destructor
   delete masterStudent;
   delete masterFaculty;
+  delete externStudent;
+  delete externFaculty;
+
 }
 
-bool UniversityDB::run(DoublyLinkedList<UniversityDB>& rollback) {  //bread and butter function
-  FileIO<Student>* externStudent;
-  FileIO<Faculty>* externFaculty;
-  externStudent = new FileIO<Student>("studentBSTdata.txt"); //open file read stream and initialize database
-  externFaculty = new FileIO<Faculty>("facultyBSTdata.txt");
-  UniversityDB* dbstate = new UniversityDB();
-  *dbstate = *this;
-  rollback.insertFront(*dbstate);
-
+void UniversityDB::run() {  //bread and butter function
   bool boole = true; //run switch cases until boole dies
   //if externStudent and externFaculty are not empty, load 'er up
   Student* insertStudent;
@@ -66,8 +47,8 @@ bool UniversityDB::run(DoublyLinkedList<UniversityDB>& rollback) {  //bread and 
   double sgpa = 0.0f;
   unsigned int sadvisor = 0;
   string germanShepherd = "";
-  while (!externStudent->endOfFile()) { //create instances of Student objects from file read and push into masterStudent
-    germanShepherd = externStudent->readLine();
+  while (!this->externStudent->endOfFile()) { //create instances of Student objects from file read and push into masterStudent
+    germanShepherd = this->externStudent->readLine();
     int i = 0;
     if (germanShepherd.length() > 18) {
       i = 0;
@@ -124,9 +105,9 @@ bool UniversityDB::run(DoublyLinkedList<UniversityDB>& rollback) {  //bread and 
   GenLinkedList<unsigned int>* insertadvisees;
   string australianshepherd = "";
   unsigned int insertadviseeID = 0;
-  while (!externFaculty->endOfFile()) { //Create instances of Faculty objects from file read and push into masterFaculty
+  while (!this->externFaculty->endOfFile()) { //Create instances of Faculty objects from file read and push into masterFaculty
     insertadvisees = new GenLinkedList<unsigned int>();
-    australianshepherd = externFaculty->readLine();
+    australianshepherd = this->externFaculty->readLine();
     int i = 0;
     if (australianshepherd.length() > 10) {
       while (australianshepherd[i] != static_cast<char>(44)) { //while there there are still delimiters and end of string has not been reached
@@ -511,22 +492,15 @@ bool UniversityDB::run(DoublyLinkedList<UniversityDB>& rollback) {  //bread and 
       }
       break;
       case 13:  //roll back: TO-DO
-      if (rollback.getSize() != 0) {
-        cout << "db rollbacksize: " << rollback.getSize() << endl;
-        return true;
-      }
-      else {
-        cout << "nothing to rollback\n";
-      }
-        return true;
         break;
       case 14:  //Save and exit database to exter output stream to text filepath
         cout << "Saving and exiting..." << endl;
-        externStudent->ostream.close();
-        externStudent->ostream = ofstream("studentBSTdata.txt");
-        externFaculty->ostream.close();
-        externFaculty->ostream = ofstream("facultyBSTdata.txt");
+        this->externStudent->ostream.close();
+        this->externStudent->ostream = ofstream("studentBSTdata.txt");
+        this->externFaculty->ostream.close();
+        this->externFaculty->ostream = ofstream("facultyBSTdata.txt");
         while (!this->masterStudent->isEmpty()) {
+          cout << this->masterStudent->getRoot()->value.toExtern();
           externStudent->ostream << this->masterStudent->getRoot()->value.toExtern();
           this->masterStudent->deleter(this->masterStudent->getRoot()->value);
         }
@@ -554,9 +528,6 @@ bool UniversityDB::run(DoublyLinkedList<UniversityDB>& rollback) {  //bread and 
         cout << "unrecognized input!" << endl;
     }
   }
-  delete externStudent;
-  delete externFaculty;
-  return false;
 }
 
 

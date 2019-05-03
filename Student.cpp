@@ -35,15 +35,6 @@ Student::Student(string name, string level, string major, double gpa) {  //idNum
   this->advisor = 0;
 
 }
-Student::Student(const Student& copy) {
-  Student* temp;
-  temp = new Student();
-  temp->idNum = copy.idNum;
-  temp->name = copy.name;
-  temp->level = copy.level;
-  temp->gpa = copy.gpa;
-  temp->advisor = copy.advisor;
-}
 //destructor
 
 Student::~Student() {}

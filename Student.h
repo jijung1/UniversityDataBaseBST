@@ -38,7 +38,6 @@ public:
 
 Student();
 Student(string name, string level, string major, double gpa);  //idNum randomized for even distribution in BST?
-Student(const Student& copy);
 
 //destructor
 
