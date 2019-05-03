@@ -22,20 +22,21 @@ Course no. & Section:   CS350-02
 #include "Student.h"
 #include <string>
 #include "FileIO.h"
+#include "GenericDoublyLinkedList.h"
 
 using namespace std;
 
 class UniversityDB {
-private:
+public:
   BST<Student>* masterStudent;
   BST<Faculty>* masterFaculty;
-  FileIO<Student>* externStudent; //for external data read/write
-  FileIO<Faculty>* externFaculty;
 
 public:
   UniversityDB(const BST<Student>& masterStudent, const BST<Faculty>& masterFaculty);
+  UniversityDB(const UniversityDB& copy);
+  UniversityDB();
   ~UniversityDB();
-  void run();
+  bool run(DoublyLinkedList<UniversityDB>& rollback);
   void assignAdvisor(const Student& student);
 
 };

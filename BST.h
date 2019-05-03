@@ -50,7 +50,7 @@ template <typename E>
 class BST {
 public:
     BST();
-  //  BST(const BST<E>& copy);
+    BST(const BST<E>& copy);
     ~BST();
     void insert(const E& value);
     bool contains(const E &value);
@@ -78,11 +78,9 @@ BST<E>::BST() //default constructor
   this->size = 0;
 }
 
-
-/*
 template <typename E>
 BST<E>::BST(const BST<E>& copy) {
-  BST<E*> temp;
+  BST<E>* temp;
   temp = new BST<E>();
   cout << "bst copy contructor called" << endl;
   temp->root = copy.getRoot();
@@ -91,8 +89,9 @@ BST<E>::BST(const BST<E>& copy) {
     temp->insert(copy.getRoot()->value);
     copy.deleter(copy.getRoot()->value);
   }
+  this->root = temp->root;
+  this->size = temp->size;
 }
-*/
 template <typename E>
 BST<E>::~BST() {
   while(this->root != NULL) {
